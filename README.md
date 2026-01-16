@@ -54,7 +54,6 @@ All code is contained in Jupyter notebooks (".ipynb").
 ---
 
 ## Collaboration Notes
-.
 - Commit messages should be concise and descriptive.
 - No personal file paths or machine-specific information should be added to the notebooks.
 
