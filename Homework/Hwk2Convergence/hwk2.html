@@ -7544,7 +7544,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [30]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -7639,7 +7639,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [31]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Create GDPPC for 1960 and 2018</span>
@@ -7654,8 +7654,8 @@ a.anchor-link {
 <span class="n">df</span><span class="p">[</span><span class="s2">"growth"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_2018"</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_1960"</span><span class="p">]</span>
 
 <span class="c1"># Run OLS regression of growth based on initial log GDPPC (1960)</span>
-<span class="n">reg_1b</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s2">"growth ~ ln_y_1960"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">reg_1b</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+<span class="n">class_regression</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s2">"growth ~ ln_y_1960"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">class_regression</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -7673,8 +7673,8 @@ a.anchor-link {
 Dep. Variable:                 growth   R-squared:                       0.018
 Model:                            OLS   Adj. R-squared:                  0.008
 Method:                 Least Squares   F-statistic:                     1.816
-Date:                Sat, 24 Jan 2026   Prob (F-statistic):              0.181
-Time:                        10:55:23   Log-Likelihood:                -132.01
+Date:                Sun, 25 Jan 2026   Prob (F-statistic):              0.181
+Time:                        16:36:21   Log-Likelihood:                -132.01
 No. Observations:                 102   AIC:                             268.0
 Df Residuals:                     100   BIC:                             273.3
 Df Model:                           1                                         
@@ -7729,7 +7729,7 @@ Notes:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [32]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># initialize alpha </span>
@@ -7744,7 +7744,7 @@ Notes:
 <span class="n">df</span><span class="p">[</span><span class="s2">"ln_k_2018"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"k_2018"</span><span class="p">])</span>
 
 <span class="c1"># calculate TFP (ln A)</span>
-<span class="c1"># Formula: ln y = ln A + alpha * ln k  =&gt;  ln A = ln y - alpha * ln k</span>
+<span class="c1"># ln y = ln A + alpha * ln k  =&gt;  ln A = ln y - alpha * ln k</span>
 <span class="n">df</span><span class="p">[</span><span class="s2">"ln_A_1960"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_1960"</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_k_1960"</span><span class="p">]</span>
 <span class="n">df</span><span class="p">[</span><span class="s2">"ln_A_2018"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_2018"</span><span class="p">]</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_k_2018"</span><span class="p">]</span>
 
@@ -7789,7 +7789,7 @@ Name: ln_A_1960, dtype: float64
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [33]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># correlation between ln y and ln A for 1960</span>
@@ -7864,7 +7864,7 @@ Name: ln_A_1960, dtype: float64
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [34]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># calculate US TFP for 2018</span>
@@ -7945,7 +7945,7 @@ If Canada had US-level TFP in 2018:</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [35]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># calculate hypothetical growth for all countries with 2018 and 1960 data</span>
@@ -7971,8 +7971,8 @@ If Canada had US-level TFP in 2018:</p>
 Dep. Variable:             growth_hyp   R-squared:                       0.814
 Model:                            OLS   Adj. R-squared:                  0.812
 Method:                 Least Squares   F-statistic:                     437.6
-Date:                Sat, 24 Jan 2026   Prob (F-statistic):           2.64e-38
-Time:                        10:55:23   Log-Likelihood:                -27.428
+Date:                Sun, 25 Jan 2026   Prob (F-statistic):           2.64e-38
+Time:                        16:35:23   Log-Likelihood:                -27.428
 No. Observations:                 102   AIC:                             58.86
 Df Residuals:                     100   BIC:                             64.11
 Df Model:                           1                                         
@@ -8050,7 +8050,7 @@ Notes:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [36]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Production Function: Y = A K^0.3 (HL)^0.7</span>
@@ -8104,7 +8104,7 @@ Name: ln_A_hc_2018, dtype: float64
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [37]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Correlation</span>
@@ -8173,7 +8173,7 @@ Name: ln_A_hc_2018, dtype: float64
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [38]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># correlation between old TFP (ln_A_2018) and new TFP (ln_A_hc_2018)</span>
