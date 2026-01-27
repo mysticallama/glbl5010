@@ -7544,7 +7544,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [80]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -7562,7 +7562,7 @@ a.anchor-link {
 <span class="c1"># Filter for rows that have data for both 1960 and 2018 to ensure consistent samples</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">"pop1960"</span><span class="p">,</span> <span class="s2">"cgdpo1960"</span><span class="p">,</span> <span class="s2">"cn1960"</span><span class="p">,</span> <span class="s2">"pop2018"</span><span class="p">,</span> <span class="s2">"cgdpo2018"</span><span class="p">,</span> <span class="s2">"cn2018"</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Data loaded. Number of countries:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of countries after dropna:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -7576,7 +7576,7 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Data loaded. Number of countries: 102
+<pre>Number of countries after dropna: 102
   countrycode    country    pop1960    hc1960  cgdpo1960      cn1960  \
 3         ARG  Argentina  20.545674  1.953866    65001.0  107963.000   
 5         AUS  Australia  10.470019  2.746758   163815.0  744405.700   
@@ -7639,7 +7639,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [81]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Create GDPPC for 1960 and 2018</span>
@@ -7650,10 +7650,12 @@ a.anchor-link {
 <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_1960"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"y_1960"</span><span class="p">])</span>
 <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_2018"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"y_2018"</span><span class="p">])</span>
 
-<span class="c1"># Calculate Growth (Difference in logs)</span>
-<span class="n">df</span><span class="p">[</span><span class="s2">"growth"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_2018"</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_1960"</span><span class="p">]</span>
+<span class="c1"># Calculate Annualized Growth Rate</span>
+<span class="c1"># Formula: (ln(y_t) - ln(y_0)) / T</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"growth"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_2018"</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_1960"</span><span class="p">])</span> <span class="o">/</span> <span class="mi">58</span>
 
-<span class="c1"># Run OLS regression of growth based on initial log GDPPC (1960)</span>
+<span class="c1"># Run OLS regression of annualized growth on initial log GDPPC (1960)</span>
+<span class="c1"># Convergence Regression: growth_i = beta_0 + beta_1 * ln(y_1960) + error</span>
 <span class="n">class_regression</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s2">"growth ~ ln_y_1960"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">class_regression</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
 </pre></div>
@@ -7674,16 +7676,16 @@ Dep. Variable:                 growth   R-squared:                       0.018
 Model:                            OLS   Adj. R-squared:                  0.008
 Method:                 Least Squares   F-statistic:                     1.816
 Date:                Mon, 26 Jan 2026   Prob (F-statistic):              0.181
-Time:                        14:12:23   Log-Likelihood:                -132.01
-No. Observations:                 102   AIC:                             268.0
-Df Residuals:                     100   BIC:                             273.3
+Time:                        23:12:13   Log-Likelihood:                 282.16
+No. Observations:                 102   AIC:                            -560.3
+Df Residuals:                     100   BIC:                            -555.1
 Df Model:                           1                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P&gt;|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-Intercept      2.3232      0.726      3.198      0.002       0.882       3.764
-ln_y_1960     -0.1214      0.090     -1.347      0.181      -0.300       0.057
+Intercept      0.0401      0.013      3.198      0.002       0.015       0.065
+ln_y_1960     -0.0021      0.002     -1.347      0.181      -0.005       0.001
 ==============================================================================
 Omnibus:                        8.577   Durbin-Watson:                   2.152
 Prob(Omnibus):                  0.014   Jarque-Bera (JB):               11.721
@@ -7706,7 +7708,7 @@ Notes:
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Interpretation</strong></p>
-<p>The coefficient on "ln_y_1960" is <strong>-0.1214</strong>.</p>
+<p>The coefficient on "ln_y_1960" is <strong>-0.0021</strong>.</p>
 <p>While the coefficient is negative, which would typically suggest convergence (poorer countries growing faster), the p-value is <strong>0.181</strong>.</p>
 <p>Because this is &gt;0.05, the result is <strong>not statistically significant</strong>, therefore we do not find strong evidence of convergence across this sample data of countries.</p>
 </div>
@@ -7729,7 +7731,7 @@ Notes:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [82]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># initialize alpha </span>
@@ -7789,7 +7791,7 @@ Name: ln_A_1960, dtype: float64
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [83]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># correlation between ln y and ln A for 1960</span>
@@ -7852,31 +7854,31 @@ Name: ln_A_1960, dtype: float64
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [84]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># calculate US TFP for 2018</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Get US TFP for 2018 (using the variable you likely created in 1C)</span>
 <span class="n">us_tfp_2018</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">"countrycode"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"USA"</span><span class="p">,</span> <span class="s2">"ln_A_2018"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"USA TFP (2018): </span><span class="si">{</span><span class="n">us_tfp_2018</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-<span class="c1"># isolate ln y for 2018 using US TFP</span>
+<span class="c1"># Construct Hypothetical ln y for ALL countries using US TFP</span>
+<span class="c1"># assume alpha = 0.30 as per the assignment instructions</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.30</span>
 <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_2018_hyp"</span><span class="p">]</span> <span class="o">=</span> <span class="n">us_tfp_2018</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_k_2018"</span><span class="p">]</span>
 
-<span class="c1"># Canada for our example and isolating based on country code</span>
+<span class="c1"># Extract values for your specific target country (e.g., Canada)</span>
 <span class="n">target_country</span> <span class="o">=</span> <span class="s2">"CAN"</span>
-
 <span class="n">hyp_ln_y</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">"countrycode"</span><span class="p">]</span> <span class="o">==</span> <span class="n">target_country</span><span class="p">,</span> <span class="s2">"ln_y_2018_hyp"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">hyp_gdp_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">hyp_ln_y</span><span class="p">)</span>
 <span class="n">actual_ln_y_1960</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">"countrycode"</span><span class="p">]</span> <span class="o">==</span> <span class="n">target_country</span><span class="p">,</span> <span class="s2">"ln_y_1960"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-<span class="c1"># calculate hypothetical growth variable</span>
-<span class="n">hyp_growth</span> <span class="o">=</span> <span class="n">hyp_ln_y</span> <span class="o">-</span> <span class="n">actual_ln_y_1960</span>
+<span class="c1"># Calculate Hypothetical Annualized Growth</span>
+<span class="c1"># Formula: (ln(y_2018_hyp) - ln(y_1960)) / 58</span>
+<span class="n">hyp_growth_annualized</span> <span class="o">=</span> <span class="p">(</span><span class="n">hyp_ln_y</span> <span class="o">-</span> <span class="n">actual_ln_y_1960</span><span class="p">)</span> <span class="o">/</span> <span class="mi">58</span>
 
-<span class="c1"># printing stats</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--- </span><span class="si">{</span><span class="n">target_country</span><span class="si">}</span><span class="s2"> Hypothetical Results ---"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--- </span><span class="si">{</span><span class="n">target_country</span><span class="si">}</span><span class="s2"> Hypothetical Results (using US TFP) ---"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Hypothetical ln y (2018): </span><span class="si">{</span><span class="n">hyp_ln_y</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Hypothetical GDP per capita (2018): $</span><span class="si">{</span><span class="n">hyp_gdp_val</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Hypothetical Growth (1960-2018): </span><span class="si">{</span><span class="n">hyp_growth</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Hypothetical Annualized Growth (1960-2018): </span><span class="si">{</span><span class="n">hyp_growth_annualized</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7889,11 +7891,10 @@ Name: ln_A_1960, dtype: float64
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>USA TFP (2018): 7.3540
---- CAN Hypothetical Results ---
+<pre>--- CAN Hypothetical Results (using US TFP) ---
 Hypothetical ln y (2018): 11.0587
 Hypothetical GDP per capita (2018): $63,493.33
-Hypothetical Growth (1960-2018): 1.4441
+Hypothetical Annualized Growth (1960-2018): 0.0249
 </pre>
 </div>
 </div>
@@ -7911,7 +7912,7 @@ If Canada had US-level TFP in 2018:</p>
 <ul>
 <li>Hypothetical log GDP: <strong>~11.06</strong></li>
 <li>Hypothetical GDP ($): **$63,493.33**</li>
-<li>Hypothetical Growth: <strong>~1.44</strong></li>
+<li>Hypothetical Growth Rate: <strong>~0.0249</strong></li>
 </ul>
 </div>
 </div>
@@ -7933,11 +7934,11 @@ If Canada had US-level TFP in 2018:</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [85]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># calculate hypothetical growth for all countries with 2018 and 1960 data</span>
-<span class="n">df</span><span class="p">[</span><span class="s2">"growth_hyp"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_2018_hyp"</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_1960"</span><span class="p">]</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># calculate hypothetical growth for all countries with 2018 and 1960 data by doing diff in logs divided by 58</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">"growth_hyp"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_2018_hyp"</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">"ln_y_1960"</span><span class="p">])</span> <span class="o">/</span> <span class="mi">58</span>
 
 <span class="c1"># run Regression of differences</span>
 <span class="n">reg_1f</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s2">"growth_hyp ~ ln_y_1960"</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
@@ -7960,16 +7961,16 @@ Dep. Variable:             growth_hyp   R-squared:                       0.814
 Model:                            OLS   Adj. R-squared:                  0.812
 Method:                 Least Squares   F-statistic:                     437.6
 Date:                Mon, 26 Jan 2026   Prob (F-statistic):           2.64e-38
-Time:                        14:12:23   Log-Likelihood:                -27.428
-No. Observations:                 102   AIC:                             58.86
-Df Residuals:                     100   BIC:                             64.11
+Time:                        23:12:13   Log-Likelihood:                 386.74
+No. Observations:                 102   AIC:                            -769.5
+Df Residuals:                     100   BIC:                            -764.2
 Df Model:                           1                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P&gt;|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-Intercept      7.9687      0.261     30.581      0.000       7.452       8.486
-ln_y_1960     -0.6763      0.032    -20.919      0.000      -0.740      -0.612
+Intercept      0.1374      0.004     30.581      0.000       0.128       0.146
+ln_y_1960     -0.0117      0.001    -20.919      0.000      -0.013      -0.011
 ==============================================================================
 Omnibus:                        6.017   Durbin-Watson:                   2.237
 Prob(Omnibus):                  0.049   Jarque-Bera (JB):                5.975
@@ -7992,9 +7993,7 @@ Notes:
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><strong>Interpretation:</strong></p>
-<p>The new coefficient on "ln_y_1960" is <strong>-0.6763</strong>.</p>
-<p>Comparing this to the result in 1B (which was -0.1214 and not significant), this new coefficient is <strong>much more negative and highly statistically significant</strong>.</p>
-<p>This implies that if all countries had the same level of TFP (specifically, the US level), there would be <strong>very strong unconditional convergence</strong>. The fact that we don't see this convergence in reality implies that <strong>TFP differences</strong> are the primary reason why poorer countries are not catching up to richer ones.</p>
+<p>Convergence actually exists here when countries are assumed to have the TFP of the US in 2018. This means that if nations with low GDP per capita in 1960 focused on improving their TFP over the long-term (and did so successfully), they may have been able to achieve much faster growth rates. Therefore, the national budget office should prioritize allocating expenditures to ministries that can improve the nation’s TFP, such as the Education Ministry (which can improve the human capital of the labor force) and the Science &amp; Technology Ministry (which can provide grants to encourage technological innovation).</p>
 </div>
 </div>
 </div>
@@ -8038,7 +8037,7 @@ Notes:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [86]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -8104,7 +8103,7 @@ Total countries included: 142
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [87]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Correlation</span>
@@ -8173,7 +8172,7 @@ Total countries included: 142
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [88]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Calculate Simple TFP (ln_A_2018)</span>
